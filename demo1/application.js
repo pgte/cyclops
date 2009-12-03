@@ -51,17 +51,11 @@ function playRecording() {
 		else
 			window["run_"+el.type](el);
 	}, 30);
-	//$.each(eventStorage, function(index, el) {
-		
-		//console.info("X,Y: " + el.pageX + "," + el.pageY);
-		//window["run_"+el.type](el);
-		
-	//});
 }
 
 
 function run_mousemove(e) {
 	$("#mouse").css('top', e.pageY).css('left', e.pageX);
-	console.info("tick");
+	//console.info("tick");
 }
 
