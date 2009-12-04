@@ -51,6 +51,7 @@ $(window).load(function() {
 	
 });
 
+
 /*
 function simulateClick() {
   var evt = document.createEvent("MouseEvents");

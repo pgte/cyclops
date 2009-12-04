@@ -9,3 +9,10 @@ canvas#painthere {
     padding: 0;
     border: 1px solid black;
 }
+#overboard {
+    width: 100%;
+    height: 20px;
+}
+#overboard:hover {
+    background-color: red
+}

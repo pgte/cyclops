@@ -38,5 +38,60 @@ $(document).ready(function() {
       canvas_ctx.moveTo(x, y);
     }
 
+
+    window.pubsub = new PubSub('/record/start', '/record/stop', '/listen/start', '/listen/stop', '/listen/new', '/listen/stop');
+    CyNotify.subscribe('/record/start');
+    CyNotify.subscribe('/record/stop');
+    CyNotify.subscribe('/listen/start');
+
+
     
 });
+
+$(window).load(function() {
+
+    $(document).bind('keydown', 'm', function(e) {
+      $.jGrowl('Setting master mode');
+      master = new Cyclops('master');	
+      $(document).bind('keydown', 'r', function(e) {
+	      pubsub.publish('/record/start', e, 'recording started');
+      });
+
+      $(document).bind('keydown', 't', function(e) {
+	      pubsub.publish('/record/stop', e, 'recording stopped');
+      });
+
+    });
+
+    $(document).bind('keydown', 's', function(e) {
+
+        $.jGrowl('Setting slave mode');
+	slave = new Cyclops('save');
+	$(document).bind('keydown', 'k', function(e) {
+		pubsub.publish('/listen/start', e, 'listen started');
+	});
+	
+	$(document).bind('keydown', 'l', function(e) {
+		pubsub.publish('/listen/stop', e, 'listen stopped');
+	});
+	
+
+    });
+    
+	
+
+/*	$('img').click(function(e) {
+		console.info(e);
+		console.info("click on image");
+	})
+	
+	$("#a").click(function() {
+		simulateClick();
+	});
+	
+	$(document).click(function() {
+		console.info("click on document");
+	});*/
+	
+});
+
