@@ -1,9 +1,25 @@
 var Cyclops = {
 	
-	init:function() {
+	init_as: function(type) {
 		this.eventStorage = {};
-		pubsub.subscribe('/record/start', this, "startRecording");
-		pubsub.subscribe('/record/stop', this, "stopRecording");
+		
+		if (type == "master")
+		{
+			pubsub.subscribe('/record/start', this, "startRecording");
+			pubsub.subscribe('/record/stop', this, "stopRecording");
+		}
+		else
+		{
+			pubsub.subscribe('/listen/start', this, 'startListening');
+		}
+	},
+	
+	startListening: function() {
+	  $.get("/activity?id=final", {}, function(ev) {
+			ev = JSON.parse(ev);
+			this['playEvent_'+ev.type](ev.data);
+			this.startListening();
+	  });
 	},
 
 	startRecording: function(e) {
@@ -22,7 +38,7 @@ var Cyclops = {
 	sendEvent: function(e) {
 		ev = this['getEvent_'+e.type](e);
 		
-		$.post('/publish?id=demo2', ev.serialize(), function(data, textStatus) {
+		$.post('/publish?id=final', ev.serialize(), function(data, textStatus) {
 			if (textStatus != "success")
 				console.info("failed posting! " + stextStatus);
 		});

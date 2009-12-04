@@ -1,9 +1,10 @@
 
 
 $(document).ready(function() {
-	window.pubsub = new PubSub('/record/start', '/record/stop');
+	window.pubsub = new PubSub('/record/start', '/record/stop', '/listen/start', '/listen/stop');
 	CyNotify.subscribe('/record/start');
 	CyNotify.subscribe('/record/stop');
+	CyNotify.subscribe('/listen/start');	
 
 	
 	/*e = new CyEvent("mousemove", { x:10, y:20});
@@ -15,7 +16,7 @@ $(document).ready(function() {
 });
 
 $(window).load(function() {
-	Cyclops.init();
+	Cyclops.init_as('slave');
 
 	$(document).bind('keydown', 'Ctrl+r', function(e) {
 		pubsub.publish('/record/start', e, 'recording started');
@@ -23,6 +24,10 @@ $(window).load(function() {
 	
 	$(document).bind('keydown', 'Ctrl+s', function(e) {
 		pubsub.publish('/record/stop', e, 'recording stopped');
+	});
+	
+	$(document).bind('keydown', 'Ctrl+l', function(e) {
+		pubsub.publish('/listen/start', e, 'listen started');
 	});
 	
 /*	$('img').click(function(e) {
