@@ -1,0 +1,77 @@
+<html>
+<style>
+#board {
+  width: 100%;
+  height: 100px;
+  background-color: green;
+}
+#board:hover {
+  background-color: yellow;
+}
+</style>
+<body>
+  <div id="board" style="" onmouseover="console.info();"></div>
+  <h1>Cyclops Playbacker</h1>
+  <h2>Enter events:</h2>
+  <form action="/activity?id=__ID__" method="POST">
+    <p>
+      <label for="events">Events JSON:</label><br />
+      <textarea id="events" name="events"></textarea>
+    </p>
+    <p>
+      <input type="submit" name="process" id="process" value="Trigger"/>
+    </p>
+  </form>
+  <script src="../assets/javascripts/jquery.js" type="text/javascript" charset="utf-8" ></script>
+  <script src="../assets/javascripts/json2.js" type="text/javascript" charset="utf-8" ></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#board').mouseover(function(ev) {
+        console.info("clientX:"+ev.clientX);
+        console.info("clientY:"+ev.clientY);
+      });
+      $('form').submit(function() {
+	var jsonLines = $('#events').val();
+        var jsonLineArray = jsonLines.split("\r|\n|\r\n");
+        var jqDoc = $(document);
+        for(lineNumber in jsonLineArray) {
+          line = jsonLineArray[lineNumber];
+          console.info('parsing '+ line);
+          try {
+	    var event_object = JSON.parse(line);
+	    console.info('Object = '+event_object);
+            //jqDoc.trigger(event_object.type, event_object.data);
+            //console.info("X:"+event_object.data.x);
+            //console.info("Y:"+event_object.data.y);
+
+            var event = document.createEvent("MouseEvents");
+            event.initMouseEvent(
+              event_object.type,
+              true,
+              true,
+              window,
+              0,
+              0,
+              0,
+              0,
+              0,
+              false,
+              false,
+              false,
+              false,
+              0,
+              null             
+            );
+            canceled = !document.elementFromPoint(event_object.data.x, event_object.data.y).dispatchEvent(event);
+            if(canceled)
+              console.error('event canceled');
+          } catch(e) {
+            console.error(e);
+          }
+        }
+	return false;
+      });
+    });
+  </script>
+  </body>
+</html>

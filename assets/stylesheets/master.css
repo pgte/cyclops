@@ -1,0 +1,11 @@
+#message {
+  padding: 1em;
+  background-color: grey;
+  border: 1px solid black;
+}
+canvas#painthere {
+    width: 300px;
+    height: 300px;
+    padding: 0;
+    border: 1px solid black;
+}
