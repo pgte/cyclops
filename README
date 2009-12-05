@@ -4,6 +4,8 @@ Install
 1. Install nginx with the http push module.
 You can find instructions here:
 
+http://www.igvita.com/2009/10/21/nginx-comet-low-latency-server-push/
+
 2. Clone cyclops
 
 3. Link nginx.conf to cyclops/nginx/nginx.conf
@@ -19,4 +21,3 @@ You can find instructions here:
 8. Click on the master link
 
 9. Move your mouse and click on things
-
