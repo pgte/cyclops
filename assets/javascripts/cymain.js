@@ -182,7 +182,7 @@ Cyclops.prototype.playEvent_mousemove = function(e) {
   var el;
     if(el = slave.__find_object_in_location(e.data.x- (document.body.scrollLeft + document.documentElement.scrollLeft),
 					    e.data.y - (document.body.scrollTop + document.documentElement.scrollTop))) {   
-      var jsEvent = this.__create_event('mousemove', e.data.x- (document.body.scrollLeft + document.documentElement.scrollLeft), e.data.y- (document.body.scrollTop + document.documentElement.scrollTop));
+      var jsEvent = this.__create_event('mousemove', e.data.x/*- (document.body.scrollLeft + document.documentElement.scrollLeft)*/, e.data.y /*- (document.body.scrollTop + document.documentElementscrollTop)*/);
       $(el).trigger(jsEvent);
   }
 }
