@@ -74,9 +74,13 @@ Cyclops.prototype.startListeningFromStorage = function() {
 }
 
 Cyclops.prototype.startRecording = function() {
-	$(document).bind('mousemove', this.sendEvent);
+
+    $(document).bind('mousemove', this.sendEvent);
 	$(document).bind('click', this.sendEvent);
 	$(document).bind('mouseover', this.sendEvent);
+        $(window).bind('resize', this.sendEvent);
+        $(window).bind('scroll', this.sendEvent);
+
     /*
 	$(document).bind('mouseout', this.sendEvent);
 	$(document).bind('mouseenter', this.sendEvent);
@@ -99,58 +103,62 @@ Cyclops.prototype.storeEvent = function(e) {
 Cyclops.prototype.sendEvent = function(e) {
 
         
-  ev = master['getEvent_'+e.type](e);
+  var ev = master['getEvent_'+e.type](e);
   //console.info(ev.when+': sending '+e.type);
-	
-  $.post('/publish?id='+$.cookie('cyclops_queue_id'), ev.serialize(), function(data, textStatus) {
-  });	
+
+  $.post('/publish?id='+$.cookie('cyclops_queue_id'), ev.serialize(), function(data, textStatus) {});
+
+  if(e.type == 'click') {
+      var href = $(e.target).attr('href');
+      if(href) {
+	  $(e.target).attr('href', href+'?cyclops_master=true');
+      }
+      //console.info(e.nodeName);
+  };
 }
 
 Cyclops.prototype.getEvent_mousemove = function(e) {
-  event = new CyEvent("mousemove", { x:e.pageX, y:e.pageY });
-  return event;	
+  return new CyEvent("mousemove", { x:e.pageX, y:e.pageY });
 }
 
 Cyclops.prototype.getEvent_mouseover = function(e) {
     //console.info('getting mouseover:'+e.type);
-    if(e.type == 'mouseover') {
-	event = new CyEvent("mouseover", { x:e.pageX, y:e.pageY });
-	return event;
-    }
+  return new CyEvent("mouseover", { x:e.pageX, y:e.pageY });
 }
 
 Cyclops.prototype.getEvent_mouseout = function(e) {
     //console.info('getting mouseout:'+e.type);
-    if(e.type == 'mouseout') {
-	event = new CyEvent("mouseout", { x:e.pageX, y:e.pageY });
-	return event;
-    }
+  return  new CyEvent("mouseout", { x:e.pageX, y:e.pageY });
 }
 
 Cyclops.prototype.getEvent_mouseenter = function(e) {
-	event = new CyEvent("mouseenter", { x:e.pageX, y:e.pageY });
-	return event;	
+  return new CyEvent("mouseenter", { x:e.pageX, y:e.pageY });
 }
 
 Cyclops.prototype.getEvent_mouseleave = function(e) {
-	event = new CyEvent("mouseleave", { x:e.pageX, y:e.pageY });
-	return event;	
+  return new CyEvent("mouseleave", { x:e.pageX, y:e.pageY });
 }
 
 Cyclops.prototype.getEvent_mouseup = function(e) {
-  event = new CyEvent("mouseup", { x:e.pageX, y:e.pageY, clicks:e.detail });
-  return event;	
+  return new CyEvent("mouseup", { x:e.pageX, y:e.pageY, clicks:e.detail });
 }
 
 Cyclops.prototype.getEvent_mousedown = function(e) {
-  event = new CyEvent("mousedown", { x:e.pageX, y:e.pageY, clicks:e.detail });
-  return event;	
+  return new CyEvent("mousedown", { x:e.pageX, y:e.pageY, clicks:e.detail });
 }
 
 
 Cyclops.prototype.getEvent_click = function(e) {
-  event = new CyEvent("click", { x:e.pageX, y:e.pageY });
-  return event;	
+  return new CyEvent("click", { x:e.pageX, y:e.pageY });
+}
+
+Cyclops.prototype.getEvent_resize = function(e) {
+//    console.info('resize');
+    return new CyEvent("resize", { height:$(window).height(), width:$(window).width() });
+}
+
+Cyclops.prototype.getEvent_scroll = function(e) {
+    return new CyEvent("scroll", { left:document.body.scrollLeft+ document.documentElement.scrollLeft, top: document.body.scrollTop + document.documentElement.scrollTop });
 }
 
 
@@ -177,9 +185,10 @@ Cyclops.prototype.__create_event = function(type, pageX, pageY) {
 Cyclops.prototype.playEvent_mousemove = function(e) {
   // TODO: move to dispatch event
   $("#mouse").css('top', e.data.y).css('left', e.data.x);
+  var el;
   if(el = slave.__find_object_in_location(e.data.x, e.data.y)) {   
     //el.dispatchEvent(evt);
-      jsEvent = this.__create_event('mousemove', e.data.x, e.data.y);
+      var jsEvent = this.__create_event('mousemove', e.data.x, e.data.y);
       $(el).trigger(jsEvent);
   }
 }
@@ -188,9 +197,9 @@ Cyclops.prototype.playEvent_mouseover = function(e) {
   // TODO: move to dispatch event
   $("#mouse").css('top', e.data.y).css('left', e.data.x);
   var evt = document.createEvent("MouseEvents");
-  el = slave.__find_object_in_location(e.data.x, e.data.y)
+  var el = slave.__find_object_in_location(e.data.x, e.data.y)
   if(el) {
-    jsEvent = this.__create_event('mouseover', e.data.x, e.data.y);
+    var jsEvent = this.__create_event('mouseover', e.data.x, e.data.y);
     $(el).trigger(jsEvent);
   }
 }
@@ -198,9 +207,9 @@ Cyclops.prototype.playEvent_mouseover = function(e) {
 Cyclops.prototype.playEvent_mouseout = function(e) {
   // TODO: move to dispatch event
   $("#mouse").css('top', e.data.y).css('left', e.data.x);
-
+  var el;
   if(el = slave.__find_object_in_location(e.data.x, e.data.y)) {   
-    jsEvent = this.__create_event('mouseout', e.data.x, e.data.y);
+    var jsEvent = this.__create_event('mouseout', e.data.x, e.data.y);
     $(el).trigger(jsEvent);
   }
 }
@@ -209,9 +218,9 @@ Cyclops.prototype.playEvent_mouseout = function(e) {
 Cyclops.prototype.playEvent_mouseenter = function(e) {
   // TODO: move to dispatch event
   $("#mouse").css('top', e.data.y).css('left', e.data.x);
-
+  var el;
   if(el = slave.__find_object_in_location(e.data.x, e.data.y)) {   
-    jsEvent = this.__create_event('mouseenter', e.data.x, e.data.y);
+    var jsEvent = this.__create_event('mouseenter', e.data.x, e.data.y);
     $(el).trigger(jsEvent);
   }
 }
@@ -219,34 +228,58 @@ Cyclops.prototype.playEvent_mouseenter = function(e) {
 Cyclops.prototype.playEvent_mouseleave = function(e) {
   // TODO: move to dispatch event
   $("#mouse").css('top', e.data.y).css('left', e.data.x);
-
+  var el;
   if(el = slave.__find_object_in_location(e.data.x, e.data.y)) {   
-    jsEvent = this.__create_event('mouseleave', e.data.x, e.data.y);
+    var jsEvent = this.__create_event('mouseleave', e.data.x, e.data.y);
     $(el).trigger(jsEvent);
   }
 }
 
 Cyclops.prototype.playEvent_mouseup = function(e) {
   // TODO: move to dispatch event
+  var el;
   if(el = slave.__find_object_in_location(e.data.x, e.data.y)) {   
-    jsEvent = this.__create_event('mouseup', e.data.x, e.data.y);
+    var jsEvent = this.__create_event('mouseup', e.data.x, e.data.y);
     $(el).trigger(jsEvent);
   }
 }
 
 Cyclops.prototype.playEvent_mousedown = function(e) {
   // TODO: move to dispatch event
+  var el;
   if(el = slave.__find_object_in_location(e.data.x, e.data.y)) {   
-    jsEvent = this.__create_event('mousedown', e.data.x, e.data.y);
+    var jsEvent = this.__create_event('mousedown', e.data.x, e.data.y);
     $(el).trigger(jsEvent);
   }
 }
 
 Cyclops.prototype.playEvent_click = function(e) {
   // TODO: move to dispatch event
-  if(el = slave.__find_object_in_location(e.data.x, e.data.y)) {   
-    jsEvent = this.__create_event('click', e.data.x, e.data.y);
-    $(el).trigger(jsEvent);
-  }
+   //console.info('CLICK!');
+   var el, href;
+   if(el = slave.__find_object_in_location(e.data.x, e.data.y)) {
+       //console.info(el);
+       if(href = $(el).attr('href')) {
+	 document.location = href+'?cyclops_slave=true';
+     } else {
+       $(el).click();
+     }
+   } else {
+       //console.info('object not found for click');
+   }
 
 }
+
+Cyclops.prototype.playEvent_resize = function(e) {
+    window.resizeTo(e.data.width, e.data.height+170);
+}
+
+Cyclops.prototype.playEvent_scroll = function(e) {
+    //console.info('scrolling to '+e.data.left+','+e.data.top);
+    window.scrollTo(e.data.left, e.data.top);
+}
+
+$(window).load(function() {
+    
+});
+

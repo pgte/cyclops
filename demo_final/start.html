@@ -16,6 +16,12 @@
     var queue_id = jQuery.url.param("queue_id");
     $.cookie('cyclops_queue_id', queue_id);
     var redirect_to = jQuery.url.param("redirect_to");
+    var cyclops_slave = jQuery.url.param("cyclops_slave");
+    if(cyclops_slave == 'true')
+      redirect_to += '?cyclops_slave=true';
+    var cyclops_master = jQuery.url.param("cyclops_master");
+    if(cyclops_master == 'true')
+      redirect_to += '?cyclops_master=true';
     //alert(unescape(redirect_to));
     document.location = redirect_to;
   </script>

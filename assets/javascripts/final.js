@@ -53,7 +53,7 @@ $(document).ready(function() {
 
 $(window).load(function() {
 
-    $(document).bind('keydown', 'm', function(e) {
+    function set_master_mode() {
       $.jGrowl('Setting master mode');
       master = new Cyclops('master');	
       $(document).bind('keydown', 'r', function(e) {
@@ -63,11 +63,19 @@ $(window).load(function() {
       $(document).bind('keydown', 't', function(e) {
 	      pubsub.publish('/record/stop', e, 'recording stopped');
       });
+    }
 
+    $(document).bind('keydown', 'm', function(e) {
+	set_master_mode();
     });
 
-    $(document).bind('keydown', 's', function(e) {
+    if(jQuery.url.param('cyclops_master') == 'true') {
+	set_master_mode();
+	master.startRecording();
 
+    }
+
+    function set_slave_mode() {
         $.jGrowl('Setting slave mode');
 	slave = new Cyclops('save');
 	$(document).bind('keydown', 'k', function(e) {
@@ -77,8 +85,15 @@ $(window).load(function() {
 	$(document).bind('keydown', 'l', function(e) {
 		pubsub.publish('/listen/stop', e, 'listen stopped');
 	});
-	
+    }
 
+    if(jQuery.url.param('cyclops_slave') == 'true') {
+	set_slave_mode();
+	slave.startListening();
+    }
+
+    $(document).bind('keydown', 's', function(e) {
+	set_slave_mode();
     });
 
 /*	$('img').click(function(e) {

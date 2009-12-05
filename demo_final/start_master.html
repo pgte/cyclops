@@ -14,15 +14,17 @@
       <input type="text" id="url" value="http://localhost:8000/demo_final/application.html"/>
     </p>
     <p>
-      <input type="submit" id="go" value="generate URL" />
+      <input type="submit" id="go" value="generate URLs" />
     </p>
 
     <p>
-      <input type="text" id="generated_url" />
+      <label for="slave_url">
+      <input style="width:600px" type="text" id="slave_url" />
     </p>
   
   </form>
 
+  <h4>Master link:</h4>
   <p id="link_container"></p>
   
   <script src="../assets/javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
@@ -45,9 +47,10 @@
     $('form').submit(function() {
       var url = $('#url').val();
       var queueId = randomString(10);
-      var final_url = 'http://localhost:8000/demo_final/start.html?queue_id='+escape(queueId)+'&redirect_to='+url;
-      $('#generated_url').val(final_url);
-      $('#link_container').html('<a href="'+final_url+'" >'+final_url+'</a>');
+      var slave_url = 'http://localhost:8000/demo_final/start.html?queue_id='+escape(queueId)+'&redirect_to='+url;
+      $('#slave_url').val(slave_url+'&cyclops_slave=true');
+      var master_url = slave_url+'&cyclops_master=true';
+      $('#link_container').html('<a href="'+master_url+'" >'+master_url+'</a>');
       return false;
     });
   </script>
