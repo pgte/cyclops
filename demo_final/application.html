@@ -8,19 +8,53 @@
   <link rel="stylesheet" href="../assets/stylesheets/jquery.jgrowl.css" type="text/css" media="screen" charset="utf-8">  
 </head>
 <body>
-  <h1>Cyclops Demo 1</h1>
-  <p>
-    <a href="application2.html">Página 2 »</a>
-  </p>
-  <h2>Message:</h2>
-  <div id="message" style="display:none"><h3>Hello World!</h3></div>
-  <button id="show_message">Show message</button>
-  <button id="hide_message">Hide message</button>
-  <h2>Paint here:</h2>
-  <canvas width="300" height="300"  id="painthere"></canvas>
-
-  <footer>
-  </footer>
+  <div id="header">
+    <h1>Cyclops Demo</h1>
+    Controlling remote browser sessions (broadcast possible) with a pure JS solution.<br/>
+    <small>Andre Goncalves (<strong>@andregoncalves</strong>) / Pedro Teixeira (<strong>@pedrogteixeira</strong>)</small>
+  </div>
+  
+  <div id="left">
+    <table>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>        
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>        
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>        
+      </tr>
+    </table>
+  </div>      
+      
+  <div id="right">
+    Recording is maintained even when user clicks on hyperlinks!<br/>
+    <a href="application2.html">Click me to try it</a>
+    
+    <div style="margin-top:1em">
+      Events are injected into slave's event queue.
+      <div id="message" style="display:none"><h3>Hello World!</h3></div>
+      <div style="margin-top:5px">
+        <button id="show_message">Show Me</button>
+        <button id="hide_message">Hide Me</button>
+      </div>
+    </div>
+  </div>
+  
+  <div style="clear:both">
+    
+  </div>
+  <div id="canvas">      
+    <h2>Canvas works (Yay!)</h2>
+    <canvas width="300" height="300" id="painthere"></canvas>
+  </div>
   <img src="../assets/images/cursor.png" id="mouse" style="position:absolute" />
   <script src="../assets/javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
   <script src="../assets/javascripts/final.js" type="text/javascript" charset="utf-8"></script>

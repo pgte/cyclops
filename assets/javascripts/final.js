@@ -47,6 +47,11 @@ $(document).ready(function() {
     CyNotify.subscribe('/record/stop');
     CyNotify.subscribe('/listen/start');
 
+		$("table td").mousemove(function() {
+			$("table td").css('backgroundColor', 'white');
+			$(this).css('backgroundColor', 'blue');
+		});
+
 
     
 });

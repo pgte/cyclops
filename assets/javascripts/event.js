@@ -5,6 +5,5 @@ function CyEvent(type, data) {
 }
 
 CyEvent.prototype.serialize = function() {
-	
 	return JSON.stringify(this);
 }
