@@ -1,6 +1,6 @@
 body { font-family:Verdana, Arial; padding:0; margin:0; background-color:#EEE; }
 
-#header { background-color:#CCC; margin:0; padding:20px; }
+#header { background-color:#CCC; margin:0; padding:20px; font-size:12px;}
 #header h1 { margin:0; }
 
 #left { width:200px; float:left; padding:1em; }
