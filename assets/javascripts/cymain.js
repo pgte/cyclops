@@ -167,21 +167,12 @@ Cyclops.prototype.__find_object_in_location = function(x, y) {
 }
 
 Cyclops.prototype.__create_event = function(type, pageX, pageY) {
-<<<<<<< HEAD:assets/javascripts/cymain.js
    ev = jQuery.Event(type);
    ev.pageX=parseInt(pageX);
    ev.clientX=ev.pageX - (document.body.scrollLeft + document.documentElement.scrollLeft) ;
    ev.pageY=parseInt(pageY);
    ev.clientY=ev.pageY - (document.body.scrollTop + document.documentElement.scrollTop);
    return ev;
-=======
-    ev = jQuery.Event(type);
-    ev.pageX=parseInt(pageX);
-    ev.clientX=ev.pageX;
-    ev.pageY=parseInt(pageY);
-    ev.clientY=ev.pageY;
-    return ev;
->>>>>>> 1cd07b23ef4607992c6d5d154165090d751d5c67:assets/javascripts/cymain.js
 }
 
 
