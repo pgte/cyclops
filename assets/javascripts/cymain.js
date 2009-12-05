@@ -14,12 +14,34 @@ var Cyclops = function(type) {
 	}
 }
 	
+cyclops_get_lastModified = null;
 Cyclops.prototype.startListening = function() {
-  $.get("/activity?id=final", {}, function(ev) {
-		ev = JSON.parse(ev);
-		slave['playEvent_'+ev.type](ev);
-		slave.startListening();
-  });	
+  
+  temp_cyclops_get_lastModified = $.ajax({
+    beforeSend: function(XMLHttpRequest) {
+      if(cyclops_get_lastModified != null) {
+	XMLHttpRequest.setRequestHeader("If-Modified-Since", cyclops_get_lastModified);
+      }
+    },
+    type: "GET",	
+      url: "/activity?id="+$.cookie('cyclops_queue_id'),
+    dataType: "json",
+    success: function(ev){
+      //console.info('data = '+data);
+      //ev = JSON.parse(data);
+      //try {
+	slave['playEvent_'+ev.type](ev);
+      //} catch(exception) {
+	 //if (self['console'])
+	  //console.error(exception);
+      //}
+      slave.startListening();
+    }
+  }).getResponseHeader('Last-Modified');
+
+  if(temp_cyclops_get_lastModified)
+    cyclops_get_lastModified = temp_cyclops_get_lastModified;
+	 
 }
 
 	
@@ -29,7 +51,7 @@ Cyclops.prototype.startListeningFromStorage = function() {
 
 	if (el)
 	{
-			console.info(el.type);
+		//console.info(el.type);
 		slave["playEvent_"+el.type](el);
 	}
 }
@@ -53,9 +75,7 @@ Cyclops.prototype.sendEvent = function(e) {
         
 	ev = master['getEvent_'+e.type](e);
 	
-	$.post('/publish?id=final', ev.serialize(), function(data, textStatus) {
-		if (textStatus != "success")
-			console.info("failed posting! " + stextStatus);
+	$.post('/publish?id='+$.cookie('cyclops_queue_id'), ev.serialize(), function(data, textStatus) {
 	});	
 }
 
@@ -78,9 +98,9 @@ Cyclops.prototype.playEvent_mousemove = function(e) {
   evt.initMouseEvent("mousemove", true, true, window,
     0, 0, 0, 0, 0, false, false, false, false, 0, null);
 
-    if(el = document.elementFromPoint(e.data.x, e.data.y)) {   
-      el.dispatchEvent(evt);
-    }
+  if(el = document.elementFromPoint(e.data.x, e.data.y)) {   
+    el.dispatchEvent(evt);
+  }
 }
 
 Cyclops.prototype.playEvent_click = function(e) {
@@ -88,13 +108,13 @@ Cyclops.prototype.playEvent_click = function(e) {
   var evt = document.createEvent("MouseEvents");
   evt.initMouseEvent("click", true, true, window,
     1, 0, 0, 0, 0, false, false, false, false, 0, null);
-    $('#mouse').hide();
-    if(el = document.elementFromPoint(e.data.x, e.data.y)) {
-	console.info(el);
-	el.dispatchEvent(evt);
-    } else  {
-	console.error('No element in '+e.data.x + ', '+e.data.y);
-    }
-    $('#mouse').show();
+  $('#mouse').hide();
+  if(el = document.elementFromPoint(e.data.x, e.data.y)) {
+      //console.info(el);
+      el.dispatchEvent(evt);
+  } else  {
+      //console.error('No element in '+e.data.x + ', '+e.data.y);
+  }
+  $('#mouse').show();
 
 }

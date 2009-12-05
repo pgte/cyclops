@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cyclops Demo Final - Start Master</title>
+  <meta name="description" content="" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" href="../assets/stylesheets/master.css" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="../assets/stylesheets/jquery.jgrowl.css" type="text/css" media="screen" charset="utf-8">  
+</head>
+<body>
+  <form>
+    <p>
+      <label for="url">URL:</label>
+      <input type="text" id="url" value="http://localhost:8000/demo_final/application.html"/>
+    </p>
+    <p>
+      <input type="submit" id="go" value="generate URL" />
+    </p>
+
+    <p>
+      <input type="text" id="generated_url" />
+    </p>
+  
+  </form>
+
+  <p id="link_container"></p>
+  
+  <script src="../assets/javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../assets/javascripts/jquery.url.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../assets/javascripts/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript">
+
+    function randomString(length)
+    {
+      chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+      pass = "";
+      for(x=0;x<length;x++)
+      {
+	i = Math.floor(Math.random() * 62);
+	pass += chars.charAt(i);
+      }
+      return pass;
+    }
+
+    $('form').submit(function() {
+      var url = $('#url').val();
+      var queueId = randomString(10);
+      var final_url = 'http://localhost:8000/demo_final/start.html?queue_id='+escape(queueId)+'&redirect_to='+url;
+      $('#generated_url').val(final_url);
+      $('#link_container').html('<a href="'+final_url+'" >'+final_url+'</a>');
+      return false;
+    });
+  </script>
+
+</body>
+</html>
