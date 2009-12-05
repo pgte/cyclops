@@ -17,6 +17,8 @@ var Cyclops = function(type) {
 cyclops_get_lastModified = null;
 Cyclops.prototype.startListening = function() {
 
+    $('#mouse').show();
+    
     $.getJSON("/activity?id="+$.cookie('cyclops_queue_id'), function(ev) {
 	//console.info(ev.when+': Playing event '+ev.type);
         slave['playEvent_'+ev.type](ev);
@@ -173,11 +175,9 @@ Cyclops.prototype.__find_object_in_location = function(x, y) {
 Cyclops.prototype.__create_event = function(type, pageX, pageY) {
     ev = jQuery.Event(type);
     ev.pageX=parseInt(pageX);
-    ev.clientX=ev.pageX - (document.body.scrollLeft
-				     + document.documentElement.scrollLeft)	;
+    ev.clientX=ev.pageX;
     ev.pageY=parseInt(pageY);
-    ev.clientY=ev.pageY - (document.body.scrollTop
-				     + document.documentElement.scrollTop);
+    ev.clientY=ev.pageY;
     return ev;
 }
 
@@ -186,9 +186,9 @@ Cyclops.prototype.playEvent_mousemove = function(e) {
   // TODO: move to dispatch event
   $("#mouse").css('top', e.data.y).css('left', e.data.x);
   var el;
-  if(el = slave.__find_object_in_location(e.data.x, e.data.y)) {   
-    //el.dispatchEvent(evt);
-      var jsEvent = this.__create_event('mousemove', e.data.x, e.data.y);
+    if(el = slave.__find_object_in_location(e.data.x- (document.body.scrollLeft + document.documentElement.scrollLeft),
+					    e.data.y - (document.body.scrollTop + document.documentElement.scrollTop))) {   
+      var jsEvent = this.__create_event('mousemove', e.data.x- (document.body.scrollLeft + document.documentElement.scrollLeft), e.data.y- (document.body.scrollTop + document.documentElement.scrollTop));
       $(el).trigger(jsEvent);
   }
 }
@@ -257,7 +257,8 @@ Cyclops.prototype.playEvent_click = function(e) {
   // TODO: move to dispatch event
    //console.info('CLICK!');
    var el, href;
-   if(el = slave.__find_object_in_location(e.data.x, e.data.y)) {
+    if(el = slave.__find_object_in_location(e.data.x- (document.body.scrollLeft + document.documentElement.scrollLeft),
+					    e.data.y - (document.body.scrollTop + document.documentElement.scrollTop))) {  
        //console.info(el);
        if(href = $(el).attr('href')) {
 	 document.location = href+'?cyclops_slave=true';
@@ -278,8 +279,4 @@ Cyclops.prototype.playEvent_scroll = function(e) {
     //console.info('scrolling to '+e.data.left+','+e.data.top);
     window.scrollTo(e.data.left, e.data.top);
 }
-
-$(window).load(function() {
-    
-});
 
