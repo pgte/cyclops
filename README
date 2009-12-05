@@ -1,0 +1,23 @@
+Install
+-------
+
+1. Install nginx with the http push module.
+You can find instructions here:
+
+http://www.igvita.com/2009/10/21/nginx-comet-low-latency-server-push/
+
+2. Clone cyclops
+
+3. Link nginx.conf to cyclops/nginx/nginx.conf
+
+4. Gentlemen, start your nginx
+
+5. browse to http://localhost:8000/demo_final/start_master.html
+
+6. Generate URLs
+
+7. Distribute slave URL to person(s) operating the browser(s) that are to be controlled (by email or IM, for instance). This person will have to open this URL.
+
+8. Click on the master link
+
+9. Move your mouse and click on things

@@ -114,5 +114,7 @@ $(window).load(function() {
 		console.info("click on document");
 	});*/
 	
+    $('#mouse').hide();
+
 });
 

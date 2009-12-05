@@ -15,12 +15,14 @@ var Cyclops = function(type) {
 }
   
 Cyclops.prototype.startListening = function() {
+	$('#mouse').show();
 	$.getJSON("/activity?id="+$.cookie('cyclops_queue_id'), function(ev) {
   	//console.info(ev.when+': Playing event '+ev.type);
 		// TODO: detect network conditions (retry?)
     slave['playEvent_'+ev.type](ev);
    	slave.startListening();
 	});
+
     
     /*
     var temp_cyclops_get_lastModified = null;
@@ -165,12 +167,21 @@ Cyclops.prototype.__find_object_in_location = function(x, y) {
 }
 
 Cyclops.prototype.__create_event = function(type, pageX, pageY) {
+<<<<<<< HEAD:assets/javascripts/cymain.js
    ev = jQuery.Event(type);
    ev.pageX=parseInt(pageX);
    ev.clientX=ev.pageX - (document.body.scrollLeft + document.documentElement.scrollLeft) ;
    ev.pageY=parseInt(pageY);
    ev.clientY=ev.pageY - (document.body.scrollTop + document.documentElement.scrollTop);
    return ev;
+=======
+    ev = jQuery.Event(type);
+    ev.pageX=parseInt(pageX);
+    ev.clientX=ev.pageX;
+    ev.pageY=parseInt(pageY);
+    ev.clientY=ev.pageY;
+    return ev;
+>>>>>>> 1cd07b23ef4607992c6d5d154165090d751d5c67:assets/javascripts/cymain.js
 }
 
 
@@ -178,9 +189,9 @@ Cyclops.prototype.playEvent_mousemove = function(e) {
   // TODO: move to dispatch event
   $("#mouse").css('top', e.data.y).css('left', e.data.x);
   var el;
-  if(el = slave.__find_object_in_location(e.data.x, e.data.y)) {   
-    //el.dispatchEvent(evt);
-      var jsEvent = this.__create_event('mousemove', e.data.x, e.data.y);
+    if(el = slave.__find_object_in_location(e.data.x- (document.body.scrollLeft + document.documentElement.scrollLeft),
+					    e.data.y - (document.body.scrollTop + document.documentElement.scrollTop))) {   
+      var jsEvent = this.__create_event('mousemove', e.data.x- (document.body.scrollLeft + document.documentElement.scrollLeft), e.data.y- (document.body.scrollTop + document.documentElement.scrollTop));
       $(el).trigger(jsEvent);
   }
 }
@@ -249,7 +260,8 @@ Cyclops.prototype.playEvent_click = function(e) {
   // TODO: move to dispatch event
    //console.info('CLICK!');
    var el, href;
-   if(el = slave.__find_object_in_location(e.data.x, e.data.y)) {
+    if(el = slave.__find_object_in_location(e.data.x- (document.body.scrollLeft + document.documentElement.scrollLeft),
+					    e.data.y - (document.body.scrollTop + document.documentElement.scrollTop))) {  
        //console.info(el);
        if(href = $(el).attr('href')) {
    document.location = href+'?cyclops_slave=true';
