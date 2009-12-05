@@ -12,6 +12,7 @@ $(document).ready(function() {
     var x;
     var y;
 
+    /*
     canvas.onmousedown = function(e) {
       x = e.clientX;
       y = e.clientY;
@@ -22,11 +23,13 @@ $(document).ready(function() {
       x = null;
       y = null;
     }
-
+*/
     canvas.onmousemove = function(e) {
+	/*
       if (x == null || y == null) {
 	return;
-      }
+      }*/
+
       x = e.clientX;
       y = e.clientY;
       x += -canvas.offsetLeft + document.body.scrollLeft
@@ -77,8 +80,6 @@ $(window).load(function() {
 	
 
     });
-    
-	
 
 /*	$('img').click(function(e) {
 		console.info(e);
